@@ -1,0 +1,12 @@
+{% ifequal  item.dolg_status 1 %}
+Организация крупная
+{% else %}
+{% ifequal  item.dolg_status 2 %}
+Организация средняя
+{% else %}
+{% ifequal  item.dolg_status 3 %}
+Организация мелкая
+{% endifequal %}
+{% endifequal %}
+Фирма
+{% endifequal %}

@@ -1,0 +1,41 @@
+Expiry Date: 16-Nov-2010
+Days Left for Expiry: 364
+Record Creation Date: 16-Nov-2009
+Domain Status: Active
+
+
+Domain servers in listed order:
+ns89.dns-rus.net
+ns90.dns-rus.net
+
+Ваш домен promzachet.com (ID: 10432) зарегистрирован до 16-11-2010
+https://best-hoster.ru/order/
+Логин  : andmak
+Пароль : F5spFNsKwJ
+
+Логин : koropovo
+Пароль : m5k2Nb6rvTl6Zk2
+
+
+Login2:
+psw2:1VPa5KB3KLf1
+
+Техническая Поддержка:
+Email Адрес: dom@best-hoster.ru
+
+Контакт Продавца:
+Email Адрес: dom@best-hoster.ru
+Tel: +7.8129909090
+
+Биллинг Контакт:
+Email Адрес: dom@best-hoster.ru
+Tel: +7.8129909090
+
+         Sales@BH Group Co. Ltd.
+dom@best-hoster.ru
+Tel: +7.8129909090
+-------------------------------------------------
+1. На аккаунте есть основной домен - фактически это привязка. Ваш основной домен - koropovo.com
+2. Второй домен Вы добавляете в качестве дополнительного в си-панели, указываете отдельную папку и заливаете файлы
+. Вы можете создать раздельные фтп-аккаунты в си-панели и указать конкретные папки для них.
+2. Вы указываете сами папку для доп. домена - она может быть как внутри в public_html, так и на одном уровне с ней.

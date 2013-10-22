@@ -1,0 +1,1 @@
+{% ifequal  item.dolg_status 1 %}Организация крупная{% endifequal %}{% ifequal  item.dolg_status 2 %}Организация средняя{% endifequal %}{% ifequal  item.dolg_status 3 %}Организация мелкая{% endifequal %}{% ifequal  item.dolg_status 4 %}Частный предприниматель{% endifequal %}{% ifequal  item.dolg_status 5 %}Физ лицо{% endifequal %}

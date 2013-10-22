@@ -1,0 +1,33 @@
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	//$.datepicker.setDefaults($.extend($.datepicker.regional["ru"]));
+
+	$("#dolg_date").datepicker();
+	$('#ui-datepicker-div').css('z-index','2010');
+}
+)
+</script>
+<div align=left >
+<form id="form_profile_prop" method="post">
+<input type="hidden" name="action" value="profile_prop" />
+<input type="hidden" name="my_firms"     id="my_firms_prop" value="" />
+<input type="hidden" name="my_firm_key"  id="my_firm_key" value="" />
+<input type="hidden" name="dolg_kind" id="dolg_kind_prop" value="" />
+<input type="hidden" name="dolg_key"  id="dolg_key"  value="0" />
+<input type="hidden" name="dolg_base" id="dolg_base" value="0" />
+<span class="anketa_label">Кто(статус):</span>
+{% include "dolg_status_select.html" %}
+<span class="anketa_label">Должник (имя):</span>
+<input  type="text" id="dolgnik_name" name="dolgnik_name" value="" maxlength="80" size="30">
+<span class="anketa_label">Обьект долга (тип):</span>
+{% include "dolg_type_select.html" %}
+<span class="anketa_label">Что (название):</span>
+<textarea id="dolg_name" name="dolg_name" rows="3" cols="30"></textarea>
+<span class="anketa_label">На сумму:</span>
+<input type="text" id="dolg_sum" name="dolg_sum" value="">&nbsp;<span class="anketa_label">Валюта:</span>
+{% include "valuta_select.html" %}
+<span class="anketa_label">Дата долга:(мес/день/год)</span>
+<input id="dolg_date"  type="text" name="dolg_date" size=10 value="" >
+<span id="mes_info"></span><div class="reset"></div>
+</form>
+</div>

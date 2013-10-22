@@ -1,0 +1,231 @@
+{% include "header.html" %}
+       <div id="main_container">
+       <script language="JavaScript" type="text/javascript">
+       //---------b:init js var------
+		var mydata=[];
+	    var ajax_actions_path="action";
+	   //---------e:init js var------
+	   function ChooseMyFirms() {
+		 if ($("#my_firms").val() == 0)  {
+			alert("Надо выбрать фирму должник")
+			$("#dolg_kind").val(0);
+		 } else {
+		    jQuery("#list4").jqGrid('clearGridData');
+			//drp = document.getElementById("my_firms");
+            //firmName = drp.options[drp.selectedIndex].text;
+			firmName =$('#my_firms option:selected').text(); 
+			if ($('#my_firms').val() =='-1') {
+				firmName='-1'
+			}
+			$("#firm_name").val(firmName);
+			$("#dolg_kind").show();
+			$("#dolg_kind").val(0);
+        }
+       } 
+       function ChooseKindDolg(){
+	   	if ($("#dolg_kind").val() == 0) {
+	   		alert("Надо выбрать тип обязательства")
+	   	} else{
+			$('#main_my_firm_key').val($('#my_firms').val())
+			jQuery("#list4").jqGrid('clearGridData');
+			ajax_save_action('form_profile_data','mes_info');
+		}
+	   }	 
+	   function showGridItems(){
+	   	 jQuery("#list4").jqGrid('clearGridData');
+		 for(var i=0;i<=mydata.length;i++) {		 
+			   jQuery("#list4").jqGrid('addRowData',i+1,mydata[i]);			 
+		 }
+	   }
+	   function makeResponseData(data){
+	   	$('#mes_info').html("");
+		  mydata =  window["eval"](data);
+		  if (mydata.length <= 0) {
+		  	 $('#edit_btn').hide();
+			 $('#del_btn').hide();
+			 alert("Данных нет!");
+			return;
+		  }
+	   }
+	   //---------------------b:ajax call--------------	  
+       function ajax_save_action(form_id,msg_id) {
+           var options = {
+        		target:"#"+msg_id,
+        		url:ajax_actions_path,
+        		resetForm:false,
+        		dataType: "json",
+        		success:profileResponse
+        	}
+        	$('#'+msg_id).show();
+        	$('#'+msg_id).html("идет отправка данных");
+        	$('#'+form_id).ajaxSubmit(options);
+        }
+        function  profileResponse (data, statusText) {                         		  
+		  makeResponseData(data);
+		  //alert('mydata[0].error='+mydata[0].error)
+		  if ((mydata[0] == undefined)||(mydata[0].error == 1)) {
+		  	 return;
+			 //alert("Error:"+mydata[0].mes);
+		  } else {
+   		      showGridItems();
+			  //jQuery("#list4").jqGrid('navGrid','hideCol',"dolg_date"); 		
+			  $('#edit_btn').show();
+			  $('#del_btn').show();
+		  }     
+        }
+	 //---------------------e:ajax call--------------
+	 function delItemProp() {
+	 	if (confirm("Удалять строку?")) {
+		   id = jQuery("#list4").jqGrid('getGridParam','selrow');
+	       if (id) {			 
+			   $.post("action",
+			      {"action":"del_item",
+				   "my_firm_key":mydata[id-1].a_key,
+				   "del_key":mydata[id-1].key,
+				   "dolg_kind":$('#dolg_kind').val()
+				  },
+			      function(data) {                   
+					makeResponseData(data);
+					showGridItems();
+                  }); 
+		   }
+		}
+	 }
+	 function hideGridCol(){
+	 	jQuery("#list4").jqGrid('hideCol',"dolg_date");
+		jQuery("#list4").jqGrid('hideCol',"dolg_status");
+		jQuery("#list4").jqGrid('hideCol',"dolg_valuta");
+		jQuery("#list4").jqGrid('hideCol',"dolg_type");
+	 }
+	 function showItemProp() {
+	  //var gr = jQuery("#list4").jqGrid('getGridParam','selrow');
+	  //if( gr != null ) jQuery("#list4").jqGrid('editGridRow',gr,{height:280,reloadAfterSubmit:false}); 
+	   var id = jQuery("#list4").jqGrid('getGridParam','selrow');
+	   if (id) {
+	   	    var ret = jQuery("#list4").jqGrid('getRowData',id);
+	        $('#dolg_base').val($('#dolg_kind').val())
+			$('#my_firms_prop').val($('#my_firms').val())
+			$('#my_firm_key').val(mydata[id-1].a_key)
+			$('#dolg_kind_prop').val($('#dolg_kind').val())
+			$('#dolg_key').val(mydata[id-1].key);
+			$('#dolg_status').val(ret.dolg_status);
+			$('#dolgnik_name').val(ret.dolgnik_name);
+			$('#dolg_type').val(ret.dolg_type);
+			$('#dolg_name').val(ret.dolg_name);
+			$('#dolg_sum').val(ret.dolg_sum);
+			$('#dolg_valuta').val(ret.dolg_valuta);
+			$('#dolg_date').val(ret.dolg_date);			
+			$("#dialog").dialog("open");
+	   }
+	   else { alert("Надо выбрать данные таблицы !");}
+	    	
+	 }
+	   jQuery(document).ready(function(){
+	   	//-------------------B:Dialog-------------------
+		   $("#dialog").dialog({
+                                width:350,
+								title: "Данные для редактирования",
+                                modal: true,
+								position: ["top","center"],
+                                buttons: {
+					             "Сохранить": function() {
+								 	           ajax_save_action('form_profile_prop','mes_info');
+                                               $(this).dialog("close");
+                                            },
+                                 "Закрыть": function() {
+                                               $(this).dialog("close");
+                                            }
+                                },
+                                autoOpen: false
+                                });
+        $("#dialog").dialog(); 
+		//--------------------B:Grid--------------------
+		jQuery("#list4").jqGrid(
+		  { datatype: "local",
+		    height: 200,
+			width: 680,
+			colNames:['No','Статус', 'Название', 'Что','Сумма','Валюта','Дата долга','d_s','d_v','d_t'],
+			colModel:[ {name:'n',index:'n', width:30, sorttype:"int",align:"left"},			         
+			           {name:'dolg_status_name',index:'dolg_status_name', width:140,editable:true,editoptions:{size:30}},					  
+					   {name:'dolgnik_name',index:'dolgnik_name', width:200,editable:true,editoptions:{size:20}},
+					   {name:'dolg_name',index:'dolg_name', width:220, align:"right",editable:true,editoptions:{size:20}},
+					   {name:'dolg_sum',index:'dolg_sum', width:140, align:"right",sorttype:"float",editable:true,editoptions:{size:20}},
+					   {name:'dolg_valuta_name',index:'dolg_valuta_name', width:70,align:"right",editable:true,editoptions:{size:20}},
+					   {name:'dolg_date',index:'dolg_date', width:1,align:"left",editable:true,editoptions:{size:20}},
+					   {name:'dolg_status',index:'dolg_status', width:1,editable:true,editoptions:{size:1}},
+					   {name:'dolg_valuta',index:'dolg_valuta', width:1,editable:true,editoptions:{size:1}},
+					   {name:'dolg_type',index:'dolg_type', width:1,editable:true,editoptions:{size:1}}					  
+					  ],
+			ondblClickRow:showItemProp, 
+		    multiselect: false,
+			caption: "Введенные данные:"
+		  }
+		 );
+		 var mydata = [ {id:"1",invdate:"2007-10-01",name:"test",note:"note",amount:"200.00",tax:"10.00",total:"210.00"},		             
+						{id:"9",invdate:"2007-09-01",name:"test3",note:"note3",amount:"400.00",tax:"30.00",total:"430.00"}
+					 ];
+		hideGridCol();
+	
+		//--------------------E:Grid--------------------
+		});
+       
+       </script>
+            <table id="layout_table">
+                <tr>
+                    <td colspan="1" id="sub_nav_column" rowspan="1">
+                        <div id="left_column_container">
+                        <div class="sub_nav_container">
+                        <ul class="sub_nav_list" id="sub_nav_list1">
+                            <li><a class="sub_nav_item" href="economic_news.html" id="sni2" shape="rect">Экономические Новости</a></li>
+                            <li><a class="sub_nav_item" href="kurs.html" id="sni2" shape="rect">Курсы валют</a></li>
+                            <li><a class="sub_nav_item" href="lib.html" id="sni2" shape="rect">Библиотека</a></li>
+                        </ul>
+                         </div>
+                         <div id="sub_container1"></div>
+                         </div>
+                    </td>
+                    <td colspan="1" id="content_column" rowspan="1">
+                        <div id="sub_container2">
+                        <div class="content" id="content_container">
+                        <h3>
+                        Ваши данные для системы взаимозачет:
+                        </h3>
+						<div id="dialog" style="display:none" title="Свойства">
+						{% include "profile_prop.tp" %}
+						</div>
+						<span id="mes_info"></span><br><div class="reset"></div>
+                        <div style="margin-bottom:20px;">
+						<form id="form_profile_data" method="post">
+							<input type="hidden" name="action" value="profile_data" />
+							<input type="hidden" name="firm_name" id="firm_name" value="-1" />
+							<input type="hidden" name="my_firm_key" id="main_my_firm_key" value="-1" />
+							<select id="my_firms" name="my_firms" onchange="ChooseMyFirms();">
+		                      <option value=0 selected=selected >Кто ?</option>
+		                      {% for firm in myfirms %}							  
+							      <option value="{{firm.key}}" >{{firm.firm_name}}</option>		                          
+							   {% endfor %}
+							  <option value=-1 >Все</option>
+		                    </select>&nbsp;&nbsp;
+		                    <select id="dolg_kind" name="dolg_kind" style="display:none;" onchange="ChooseKindDolg();">
+		                           <option value=0 >Тип обязательства ?</option>
+		                           <option value=1 >Мне должны</option>
+		                           <option value=2 >Я должен</option>
+		                           <option value=3 >Отдам в счет погашения долга</option>
+		                     </select>
+						</form>
+						 </div>
+						 <div class="reset"></div>						 
+						 <table id="list4"></table><br>
+						 <input style="margin-left:30%;display:none;" type="button" id="edit_btn" name="edit_btn" value="Редактировать" onclick="showItemProp();">&nbsp;
+						 <input style="display:none;" type="button"   id="del_btn" name="edit_btn" value="Удалить" onclick="delItemProp();">
+                        </div>
+						
+                        </div>
+					
+                    </td>
+                    </tr>
+           </table>
+       </div>
+{% include "footer.html" %} 
+
+

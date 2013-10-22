@@ -1,0 +1,36 @@
+application: promzachet
+version: 1
+runtime: python
+api_version: 1
+
+default_expiration: "7d 5h"
+
+handlers:
+- url: /css
+  static_dir: css
+
+- url: /js
+  static_dir: js
+
+- url: /js/src/
+  static_dir: js/src
+
+- url: /images
+  static_dir: images
+
+
+- url: /(index|anketa|enter|kurs|economic_news|contact|search|lib)\.html
+  script: main.py
+
+- url: /action
+  script: actions.py
+
+- url: /favicon.ico
+  static_files: images/favicon.ico
+  upload: images/favicon.ico
+
+
+- url: .*
+  script: main.py
+
+

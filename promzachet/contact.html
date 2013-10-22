@@ -1,0 +1,104 @@
+{% include "header.html" %}
+<script language="JavaScript" type="text/javascript">
+$(function() {
+	 $("#dialog").dialog({
+                    position: ["top","center"],
+                    buttons: {
+                    "Закрыть": function() {
+                                $(this).dialog("close");
+                                }
+                    },
+                    autoOpen: false
+                });
+     $("#dialog").dialog();
+})
+function check_input() {
+	if ($("#mes_txt").val().length <=3){
+		return false;
+	}
+	return true;
+}
+var ajax_actions_path="action";
+function ajax_save_action(form_id,msg_id) {
+   //alert("Saving"+$("#mes_txt").val().length)
+   if (check_input()==false){return;}
+   var options = {
+		target:"#"+msg_id,
+		url:ajax_actions_path,
+		resetForm:true,
+		dataType: "json",
+		success:contactResponse
+	}
+	$('#'+msg_id).show();
+	$('#'+msg_id).html("идет отправка данных");
+	$('#'+form_id).ajaxSubmit(options);
+}
+function  contactResponse (data, statusText) {
+ $("#dialog").dialog("open");
+ $("#dialog").html(data.mes);
+ $("#mes_info").html("");
+}
+</script>
+       <div id="main_container">
+            <table id="layout_table">
+                <tr>
+                    <td colspan="1" id="sub_nav_column" rowspan="1">
+                        <div id="left_column_container">
+                        <div class="sub_nav_container">
+                        <ul class="sub_nav_list" id="sub_nav_list1">
+                            <li><a class="sub_nav_item" href="economic_news.html" id="sni2" shape="rect">Экономические Новости</a></li>
+                            <li><a class="sub_nav_item" href="kurs.html" id="sni2" shape="rect">Курсы валют</a></li>
+                            <li><a class="sub_nav_item" href="lib.html" id="sni2" shape="rect">Библиотека</a></li>
+                        </ul>
+                         </div>
+                         <div id="sub_container1"></div>
+                         </div>
+                    </td>
+                    <td colspan="1" id="content_column" rowspan="1">
+                        <div id="sub_container2">
+                        <div class="content" id="content_container">
+                        <h3>
+                        Сообщение для быстрой связи:
+                        </h3>
+						<span id="mes_info"></span>
+						<div id="dialog" title="Ответ системы"></div>
+                        <div style="float:left">						 
+                            <form id='form_contact' name='form_contact' method='post'>
+                            <input type="hidden" name="action" value="contact" />
+							{% if key %}
+							<input type="hidden" name="dolg_key" value="{{key}}" />
+							{% endif %}	
+							Кому:<br>
+							<select name='mes_whom'>
+								{% if key %}
+									<option selected=true >Владельцу анкеты:</option>
+									<option >Разработчику сайта:</option>
+								{% else %}
+									<option selected=true >Разработчику сайта:</option>
+								{% endif %}							 
+								<option >Администрации сайта</option>
+							</select><br><br>
+							Тема:<br>
+							
+							{% if key %}
+							  <input name="mes_subj" type="text" size="63" value="По поводу долговой анкеты:" ></input>							  
+							  {% else %}
+							  <input name="mes_subj" type="text" size="63" value="По поводу долговой анкеты:" ></input>	
+							{% endif %}
+							<br><br>
+							Текст сообщения:<br>
+                            <textarea name="mes_txt" id="mes_txt" rows="5" cols="60" ></textarea><br><br>
+                            <input name="send_btn" type="button" onclick="ajax_save_action('form_contact','mes_info');" value="Отправить">
+                            </form>                         
+						 </div>
+						 <div style="float:right;display:inline;">
+						    <img  border="0" width="200px" height="220px" align="right" src="images/letter.jpg">
+						</div>	
+                        </div>
+                        </div>
+                    </td>
+                    </tr>
+                    </table>
+       </div>
+{% include "footer.html" %}
+

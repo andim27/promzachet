@@ -1,0 +1,1 @@
+{% ifequal  item.dolg_valuta 1 %}грн{% endifequal %}{% ifequal  item.dolg_valuta 2 %}руб{% endifequal %}{% ifequal  item.dolg_valuta 3 %}долл{% endifequal %}{% ifequal  item.dolg_valuta 4 %}евро{% endifequal %}

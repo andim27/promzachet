@@ -1,0 +1,186 @@
+/*----------------------------------------------------------------------------
+	colorscheme.css for colorscheme 3
+
+	this css-file contains all definitions, that depend on the colorscheme.
+
+	(c) Schlund + Partner AG
+----------------------------------------------------------------------------*/
+
+#left_column_container {
+    background: left repeat-y;
+    background-image: url(../images/submenu_.gif);
+}
+
+/*-- main container --------------------------------------------------------*/
+
+#container {
+    background: repeat-y;
+    background-image: url(../images/contentb.gif);
+}
+
+/*--- header ---------------------------------------------------------------*/
+
+#header {
+    background: bottom no-repeat;
+    background-image: url(../images/headerbg.gif);
+}
+
+/*--- key visiual ----------------------------------------------------------*/
+
+#key_visual {
+    background: no-repeat;
+}
+
+/*--- logo -----------------------------------------------------------------*/
+
+#logo {
+    background: no-repeat top right;
+}
+
+/*--- caption --------------------------------------------------------------*/
+
+#slogan {
+    background-image: url(../images/slogan_b.gif);
+}
+
+/*--- main navigation ------------------------------------------------------*/
+
+#main_nav_container {
+    background-image: url(../images/menubg00.gif);
+}
+
+/*--- main navigation items ------------------------------------------------*/
+
+a.main_nav_item {
+    background: no-repeat;
+    background-position: top left;
+}
+
+a.main_nav_item:hover {
+    background: repeat-x;
+    background-position: top left;
+}
+
+a.main_nav_active_item {
+    background: repeat-x;
+    background-position: top left;
+}
+
+/*--- subnavigation items --------------------------------------------------*/
+
+.sub_nav_container {
+    /*background: bottom right no-repeat;*/
+
+    /* background-image: url(images/static/submenu_bg.gif);*/
+
+    border-top: 5px solid #c8c8c8;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+a.sub_nav_item {
+    background: no-repeat;
+}
+
+a.sub_nav_item:hover {
+    background: no-repeat;
+}
+
+a.sub_nav_active_item {
+    background: no-repeat;
+}
+
+/*--- footer ---------------------------------------------------------------*/
+
+#footer {
+    background: transparent top left no-repeat;
+    background-image: url(../images/footerbg.gif);
+    background-color: #ffffff;
+}
+
+/*----------------------------------------------------------------------------
+  default-styles for html-elements
+----------------------------------------------------------------------------*/
+
+/*--- body -----------------------------------------------------------------*/
+
+body#main_body {
+    background-image: url(../images/pagebg00.gif);
+}
+
+/*--- paragraph ------------------------------------------------------------*/
+
+.content {
+    color: #3D3D3D;
+}
+
+.content table {
+    color: #3D3D3D;
+    border-color: #A9A9A9;
+}
+
+.content select {
+    color: #3D3D3D;
+}
+
+.content input {
+    color: #3D3D3D;
+    border-color: #919191;
+}
+
+.content textarea {
+    color: #3D3D3D;
+    border-color: #919191;
+}
+
+/*--- headings -------------------------------------------------------------*/
+
+/*--- links ----------------------------------------------------------------*/
+
+/*--- tables ---------------------------------------------------------------*/
+
+.content th {
+    color: #ffffff;
+    background-color: #A9A9A9;
+    border-color: #A9A9A9;
+}
+
+.content td {
+    border-color: #A9A9A9;
+}
+
+.content tr.odd {
+    color: #6E6E6E;
+    background-color: #ffffff;
+}
+
+.content tr.even {
+    color: #6E6E6E;
+    background-color: #F4F4F4;
+}
+
+/*--- forms ----------------------------------------------------------------*/
+
+.content fieldset {
+    border-color: #3C3C3C;
+}
+
+.content legend {
+    color: #3C3C3C;
+}
+
+.content label {
+    color: #3C3C3C;
+}
+
+.content #submit {
+    background-color: #F2F2F2;
+    border-color: #B8B8B8;
+    color: #BE7100;
+}
+
+/*--------------------------------------------------------------------------*/
+
+#weblog_calendar caption {
+    color: #7A7A7A;
+}
+

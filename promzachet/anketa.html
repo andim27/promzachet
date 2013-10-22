@@ -1,0 +1,255 @@
+{% include "header.html" %}
+       <div id="main_container">
+            <table id="layout_table">
+                <tr>
+                    <td colspan="1" id="sub_nav_column" rowspan="1">
+                        <div id="left_column_container">
+                        <div class="sub_nav_container">
+                        <ul class="sub_nav_list" id="sub_nav_list1">
+                            <li><a class="sub_nav_item" href="economic_news.html" id="sni2" shape="rect">Экономические Новости</a></li>
+                            <li><a class="sub_nav_item" href="kurs.html" id="sni2" shape="rect">Курсы валют</a></li>
+                            <li><a class="sub_nav_item" href="lib.html" id="sni2" shape="rect">Библиотека</a></li>
+                        </ul>
+                         </div>
+                         <div id="sub_container1"></div>
+                         </div>
+                    </td>
+                    <td colspan="1" id="content_column" rowspan="1">
+                        <div id="sub_container2">
+                        <div class="content" id="content_container">
+                        <h3 style="display:inline">
+                        Анкета участника системы взаимозачет:
+                        </h3>
+                        <label style="display:inline;margin-left:20%">Вы вошли как:</label>&nbsp;<a href="{{user_url}}">{{user_nick_name}}</a><div class="reset"></div><br><div class="reset"></div>
+                        <span id="mes_info"></span><br><div class="reset"></div>
+                        <!--    <label>Логин (Ваше имя):</label><input type="text" disabled="disabled" name="login" value="Нет данных">&nbsp;<label>Email:</label>&nbsp;<input type="text" name="email" value="Нет данных">&nbsp;<a href="profile.html">Ваши контактные данные</a>  -->
+                        <label><b>Организация (имя):</b></label><input type="text" size="30" id="firm_name_title_id" name="firm_name" value="???">&nbsp;<label>Контактный тел (моб):</label><input type="text" size="30" id="tel_mob_title_id" name="tel_mob" value="???">
+                        <br><br>
+                         <!-- b:Tabs -->
+                         <script type="text/javascript">
+                          var msg_info="Данные переданы!";
+                          var cur_form_id="form_anketa_me";
+                          var cur_date_id="datepicker_me";
+                          function set_cur_form(form_id){
+                            cur_form_id=form_id;
+                            if (cur_form_id=="form_anketa_me")  {cur_date_id="datepicker_me";}
+                            if (cur_form_id=="form_anketa_iam") {cur_date_id="datepicker_iam";}
+                          }
+                          function check_input() {
+                            f_name=$("#firm_name_title_id").val();
+                            f_tel_mob=$("#tel_mob_title_id").val();
+                            if ((f_name.indexOf("?") > 0 )||(f_name == "")) {
+                               msg_info="Не корректное название фирмы";
+                               return false;
+                            }
+                            if ((f_tel_mob.indexOf("?") > 0 )||(f_tel_mob == "")||(f_tel_mob.length < 5)) {
+                               msg_info="Не корректный телефон";
+                               return false;
+                            }
+                            f_t=document.forms[cur_form_id].dolg_type.value;
+                            if ((f_t == "0" )||(f_t == undefined )) {
+                               msg_info="Надо выбрать тип долга !";
+                               return false;
+                            }
+                            f_dt=$("#"+cur_date_id).val();
+                            if (cur_form_id != "form_anketa_give") {
+                                if ((f_dt.length < 9)||(f_dt.indexOf(".") <= 0 ) ) {
+                                    msg_info="Не корректная дата долга !";
+                                    return false;
+                                }
+                            }
+                            f_sum=document.forms[cur_form_id].dolg_sum.value;
+                            if (f_sum.length == 0) {
+                               msg_info="Заполните поле сумма !";
+                               return false;
+                            }
+                            f_v=document.forms[cur_form_id].dolg_valuta.value;//$("#dolg_valuta").attr("selected","selected").val();
+                            if ((f_v == "0")||(f_v == undefined )) {
+                               msg_info="Надо выбрать валюту !";
+                               return false;
+                            }
+                            return true;
+
+                           }
+                           function save_btn(form_id,msg_id){
+                            set_cur_form(form_id);
+                            if (check_input()){
+                               form_cur=document.getElementById(form_id);
+                               form_cur.firm_name.value=$("#firm_name_title_id").val();
+                               form_cur.tel_mob.value=$("#tel_mob_title_id").val();
+                               ajax_save_action(form_id,msg_id);
+                               msg_info="Данные переданы !";
+                             } else {
+                                $("#dialog").html(msg_info);
+                                $("#dialog").dialog("open");
+                             }
+
+                           }
+                           var ajax_actions_path="action";
+                           function ajax_save_action(form_id,msg_id) {
+                               var options = {
+                            		target:"#"+msg_id,
+                            		url:ajax_actions_path,
+                            		resetForm:true,
+                            		dataType: "json",
+                            		success:anketaResponse
+                            	}
+                            	$('#'+msg_id).show();
+                            	$('#'+msg_id).html("идет отправка данных");
+                            	$('#'+form_id).ajaxSubmit(options);
+                            }
+                            function  anketaResponse (data, statusText) {
+                             $("#dialog").dialog("open");
+                             $("#dialog").html(data.mes);
+                             $("#mes_info").html("");
+                             //$("#mes_info").html("Вы зарегистрированы!");
+                            }
+                           //---------------------- dialog config ----------------------
+                           $(function() {
+                        		$("#tabs").tabs(
+                                   {
+                                      selected: 0,
+                                      select: function(event, ui) {
+                                        if (ui.index == 0){ set_cur_form("form_anketa_me");  }
+                                        if (ui.index == 1){ set_cur_form("form_anketa_iam"); }
+                                        if (ui.index == 2){ set_cur_form("form_anketa_give");}
+                                      }
+                                    }
+                                );
+                                $("#dialog").dialog({
+                                    position: ["top","center"],
+                                    buttons: {
+                                    "Закрыть": function() {
+                                                $(this).dialog("close");
+                                                }
+                                    },
+                                    autoOpen: false
+                                });
+                                $("#dialog").dialog();
+                                $.datepicker.setDefaults(
+                                    $.extend($.datepicker.regional["ru"])
+                                );
+                                $('#datepicker_me').datepicker({ navigationAsDateFormat: false });
+                                $('#datepicker_me').datepicker({ defaultDate: -1 });
+                                //$('#datepicker_me').datepicker({ dayNamesShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'] });
+                                //$('#datepicker_me').datepicker({ monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'] });
+                                //$('#datepicker_me').datepicker({ monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Нояб','Дек'] });
+                                $('#datepicker_me').datepicker({ dateFormat: 'dd-mm-yy',changeMonth: true});
+                               // $('#datepicker_me').datepicker({defaultDate: new Date(), yearRange: '2009:2010', dateFormat: 'dd.mm.yy', showOn: "both"});
+                                $("#datepicker_me").datepicker();
+
+                                $('#datepicker_iam').datepicker({ monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Нояб','Дек'] });
+                                $('#datepicker_iam').datepicker({ dateFormat: 'dd-mm-yy',changeMonth: true});
+                                $("#datepicker_iam").datepicker();
+
+                        	});
+                         </script>
+
+                         <div id="tabs" >
+                          <div id="dialog" title="Ответ системы"></div>
+                        	<ul>
+                        		<li><a href="#tabs-1">Мне должны</a></li>
+                        		<li><a href="#tabs-2">Я должен</a></li>
+
+                        		<li><a href="#tabs-3">Отдам в счет погашения долга</a></li>
+                        	</ul>
+                        	<div id="tabs-1">
+                          <!--	 <div style="width:50%;">   -->
+                                <form id="form_anketa_me" method="post" action="anketa.html">
+                                <input type="hidden" id="firm_name_id" name="firm_name" value="???" />
+                                <input type="hidden" id="tel_mob_id"   name="tel_mob"   value="???" />
+                                <input type="hidden" name="action" value="dolg_me" />
+                                <table  style="border:none;margin:0px; padding:10px" align="left" width="100%" height="100%" border="0">
+                                <tbody>
+                                 <tr>
+                                    <td style="border:none;"><span class="anketa_label">Кто(статус):</span></td>
+                                    <td style="border:none;"><span class="anketa_label">Должник (имя):</span></td>
+                                    <td style="border:none;"><span class="anketa_label">Обьект долга (тип):</span> </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="border:none;padding:0px 10px 0px 0px;">
+                                      {% include "dolg_status_select.html" %}
+                                    </td style="border:none;">
+                                    <td style="border:none;padding:0px 10px 0px 0px;">
+                                            <input  type="text" name="dolgnik_name" value="" maxlength="80" size="30">
+                                    </td>
+                                    <td  style="border:none;">
+                                     {% include "dolg_type_select.html" %}
+                                    </td>
+                                  </tr>
+                                  </tbody>
+                                 </table>
+                                 <div class="reset"></div>
+                                 <span class="anketa_label">Что (название):</span><br>
+                                 <textarea name="dolg_name" rows="3" cols="55"></textarea>
+                                 <span class="anketa_label">На сумму:</span><input type="text" id="dolg_sum" name="dolg_sum" value="">&nbsp;
+                                    {% include "valuta_select.html" %}
+                                 <span class="anketa_label">Дата долга:(день.мес.год)</span><input id="datepicker_me" type="text" name="dolg_date" size=10 value=""><br>
+                                 <br><hr>
+                                 <input style="margin-left:45%;" type="button" name="save_me" value="Сохранить" onclick="save_btn('form_anketa_me','mes_info');">
+                                </form>
+                            <!--    </div>  -->
+                               <!-- <div id="anketa_img_block">
+                                  <img border="0" height="80%" align="right" src="images/man_write.png">
+                                </div>-->
+                        	</div> <!-- e:tabs-1 -->
+                        	<div id="tabs-2">
+                               <form id="form_anketa_iam" method="post" action="anketa.html">
+                                <input type="hidden" id="firm_name_id" name="firm_name" value="???" />
+                                <input type="hidden" id="tel_mob_id"   name="tel_mob"   value="???" />
+                                <input type="hidden" name="action" value="dolg_iam" />
+                               <table  style="border:none;margin:0px; padding:10px" align="left" width="100%" height="100%" border="0">
+                                <tbody>
+                                 <tr>
+                                    <td style="border:none;"><span class="anketa_label">Кому(статус):</span></td>
+                                    <td style="border:none;"><span class="anketa_label">Кому (имя):</span></td>
+                                    <td style="border:none;"><span class="anketa_label">Обьект долга (тип):</span> </td>
+                                  </tr>
+                                  <tr>
+                                    <td style="border:none;padding:0px 10px 0px 0px;">
+                                      {% include "dolg_status_select.html" %}
+                                    </td style="border:none;">
+                                    <td style="border:none;padding:0px 10px 0px 0px;">
+                                            <input  type="text" name="dolgnik_name" value="" maxlength="80" size="30">
+                                    </td>
+                                    <td  style="border:none;">
+                                    {% include "dolg_type_select.html" %}
+                                    </td>
+                                  </tr>
+                                  </tbody>
+                                 </table>
+                                 <div class="reset"></div>
+                                 <span class="anketa_label">Что (название):</span><br>
+                                 <textarea name="dolg_name" rows="3" cols="55"></textarea>
+                                 <span class="anketa_label">На сумму:</span><input type="text" id="dolg_sum" name="dolg_sum" value="">&nbsp;
+                                   {% include "valuta_select.html" %}
+                                 <span class="anketa_label">Дата долга:(день.мес.год)</span><input id="datepicker_iam"  type="text" name="dolg_date" size=10 value=""><br>
+                                 <br><hr>
+                                 <input style="margin-left:45%;" type="button" name="save_iam" value="Сохранить" onclick="save_btn('form_anketa_iam','mes_info');" >
+                                </form>
+                        	</div>
+                        	<div id="tabs-3">
+                        	    <form id="form_anketa_give" method="post" action="anketa.html">
+                                 <input type="hidden" id="firm_name_id" name="firm_name" value="???" />
+                                 <input type="hidden" id="tel_mob_id"   name="tel_mob"   value="???" />
+                                 <input type="hidden" name="action" value="dolg_give" />
+                                 <span class="anketa_label">Что отдам (тип):</span>
+                                 {% include "dolg_type_select.html" %}
+                                 <span class="anketa_label">Что (название):</span><br>
+                                 <textarea name="dolg_name" rows="3" cols="55"></textarea>
+                                 <span class="anketa_label">На сумму:</span><input type="text" id="dolg_sum" name="dolg_sum" size=10 value="">&nbsp;
+                                  {% include "valuta_select.html" %}
+                                 <br><hr>
+                                 <input style="margin-left:45%;" type="button" name="save_give" value="Сохранить" onclick="save_btn('form_anketa_give','mes_info');" >
+                                </form>
+                        	</div>
+                        </div>
+                         <!-- e:Tabs -->
+                        </div>
+                        </div>
+                    </td>
+                    </tr>
+                    </table>
+       </div>
+{% include "footer.html" %}
+

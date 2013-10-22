@@ -1,0 +1,135 @@
+{% include "header.html" %}
+<div id="main_container">
+       <script type="text/javascript">
+     function save_btn(form_id,msg_id){
+       //$("#dialog_r").dialog({title:"Регистрация"});
+       ajax_save_action(form_id,msg_id);
+
+     }
+     var ajax_actions_path="action";
+     function ajax_save_action(form_id,msg_id) {
+         var options = {
+      		target:"#"+msg_id,
+      		url:ajax_actions_path,
+      		resetForm:true,
+      		dataType: "json",
+      		success:showResponse
+      	}
+      	$('#'+msg_id).show();
+      	$('#'+msg_id).html("идет отправка данных");
+      	$('#'+form_id).ajaxSubmit(options);
+      }
+      function  showResponse (data, statusText) {
+       $("#dialog_r").dialog("open");
+       $("#dialog_r").html("Вы зарегистрированы!"+data.mes);
+       $("#mes_info").html("Вы зарегистрированы!");
+      }
+     //-------------------------------------------
+     $(function() {
+        $("#dialog_r").dialog({
+            width:370,
+            modal:"true",
+            position: ["top","center"],
+            buttons: {
+                       "Заявки": function() {
+                                  $(this).dialog("close");
+                                  window.location.href="search.html";
+                        },
+                       "Анкета": function() {
+                                  $(this).dialog("close");
+                                  window.location.href="anketa.html";
+                                 },
+                       "Закрыть": function() {
+                                  $(this).dialog("close");
+                                 }
+                        },
+             autoOpen: false
+         });
+        $("#dialog").dialog();
+     }
+     )
+   </script>
+       <table id="layout_table">
+                <tr>
+                    <td colspan="1" id="sub_nav_column" rowspan="1">
+                        <div id="left_column_container">
+                        <div class="sub_nav_container">
+                        <ul class="sub_nav_list" id="sub_nav_list1">
+                            <li><a class="sub_nav_item" href="economic_news.html" id="sni2" shape="rect">Экономические Новости</a></li>
+                            <li><a class="sub_nav_item" href="kurs.html" id="sni2" shape="rect">Курсы валют</a></li>
+                            <li><a class="sub_nav_item" href="lib.html" id="sni2" shape="rect">Библиотека</a></li>
+                        </ul>
+                         </div>
+                         <div id="sub_container1"></div>
+                         </div>
+                    </td>
+                    <td colspan="1" id="content_column" rowspan="1">
+                        <div id="sub_container2">
+
+                        <div class="content" id="content_container">
+                        <h3>
+                        Вход в систему взаимозачет:
+                        </h3><span id="mes_info"></span>
+                        <div id="dialog_r" title="Ответ системы:"></div>
+                        <table class="enter_table" style="border:none;" align="left" width="680" height="200" border="0" >
+                          <tr >
+                           <td style="border:none;">
+                            {% if  user  %}
+
+                             <div id="yes_accout" >
+                               Вы вошли в систему под именем <h3><b>{{user_nick_name}}</b></h3>
+                               Данное имя совпадает с именем в службе Google Accounts.
+                               Теперь Вы можете пользоваться всеми услугами сайта системы "ПромЗачет".
+
+                             </div>
+                             {% else %}
+
+                                <div id="no_accout">
+                                   <p>Чтобы войти в систему Вы должны <a href="{{ga_url}}">зарегистрироваться</a></p>
+                                   <p> в службе Google Accounts.</p>
+                                   <img src="images/ga.gif "></img>
+                                   <p>Если Вы являетесь пользователем Вам надо <a href="{{ga_url}}">войти</a> в данную службу</p>
+
+                             </div>
+                             {% endif %}
+
+                            <!-- <form id="form_enter" method="post" action="enter.html"></form>
+                              <table align="left" style="border:none;" width="200" height="200" border="0" >
+                                 <tr>
+                                   <td>Имя:</td>
+                                   <td style="border:none;"><input type="text" name="login" value=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td>e-mail:</td>
+                                   <td style="border:none;"><input type="text" name="email" value=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td style="border-bottom:none;">Пароль:</td>
+                                   <td style="border:none;"><input type="password" name="psw" value=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td style="border:none;"></td>
+                                   <td style="border:none;">Запомнить меня<input type="checkbox" name="remember" value="0"></td>
+                                 </tr>
+                                 <tr>
+                                   <td style="border:none;"></td>
+                                   <td style="border:none;"><input type="button" name="save_sntr" value="Сохранить" onclick="save_btn('form_enter','mes_info');"></td>
+                                 </tr>
+                               </table>
+                               </form>-->
+                           </td>
+
+                           <td style="border:none;">
+                           <img border="0" align="right" src="images/man_write.png">
+                           </td>
+                           </tr>
+                         </table>
+
+                        </div>
+                        </div>
+                    </td>
+                    </tr>
+                    </table>
+       </div>
+{% include "footer.html" %}
+

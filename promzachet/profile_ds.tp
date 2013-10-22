@@ -1,0 +1,11 @@
+[
+{% for item in items %}
+{'error':'0','a_key':'{{a_key}}','key':'{{ item.key }}','n':'{{forloop.counter}}','dolg_status_name':'{% include "dolg_status_name.tp" %}','dolgnik_name':'{{item.dolgnik_name}}','dolg_name':'{{item.dolg_name}}','dolg_sum':'{{item.dolg_sum}}','dolg_valuta_name':'{% include "dolg_valuta_name.tp" %}','dolg_date':'{{item.dolg_date|date:"d.m.Y" }}','dolg_status':'{{item.dolg_status}}','dolg_valuta':'{{item.dolg_valuta}}','dolg_type':'{{item.dolg_type}}'},
+{% endfor %}
+{% for item in items_1 %}
+{'error':'0','a_key':'{{a_key}}','key':'{{ item.key }}','n':'{{forloop.counter}}','dolg_status_name':'{% include "dolg_status_name.tp" %}','dolgnik_name':'{{item.dolgnik_name}}','dolg_name':'{{item.dolg_name}}','dolg_sum':'{{item.dolg_sum}}','dolg_valuta_name':'{% include "dolg_valuta_name.tp" %}','dolg_date':'{{item.dolg_date|date:"d.m.Y" }}','dolg_status':'{{item.dolg_status}}','dolg_valuta':'{{item.dolg_valuta}}','dolg_type':'{{item.dolg_type}}'},
+{% endfor %}
+{% for item in items_2 %}
+{'error':'0','a_key':'{{a_key}}','key':'{{ item.key }}','n':'{{forloop.counter}}','dolg_status_name':'{% include "dolg_status_name.tp" %}','dolgnik_name':'{{item.dolgnik_name}}','dolg_name':'{{item.dolg_name}}','dolg_sum':'{{item.dolg_sum}}','dolg_valuta_name':'{% include "dolg_valuta_name.tp" %}','dolg_date':'{{item.dolg_date|date:"d.m.Y" }}','dolg_status':'{{item.dolg_status}}','dolg_valuta':'{{item.dolg_valuta}}','dolg_type':'{{item.dolg_type}}'},
+{% endfor %}
+]

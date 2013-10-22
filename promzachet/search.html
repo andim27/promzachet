@@ -1,0 +1,160 @@
+{% include "header.html" %}
+<script language="JavaScript" type="text/javascript">
+//---------b:init js var------
+var mydata=[];
+var ajax_actions_path="action";
+//---------e:init js var------
+function showGridItems(){
+	   	 jQuery("#list4").jqGrid('clearGridData');
+		 for(var i=0;i<=mydata.length;i++) {		 
+			   jQuery("#list4").jqGrid('addRowData',i+1,mydata[i]);			 
+		 }
+}
+function makeResponseData(data){
+$('#mes_info').html("");
+mydata =  window["eval"](data);
+if (mydata.length <= 0) {
+  	 $('#edit_btn').hide();
+	 $('#del_btn').hide();
+	 jQuery("#list4").jqGrid('clearGridData');
+	 cur_dolg_type=$("#dolg_type option:selected").text()
+	 alert("Для типа долга \'"+cur_dolg_type+"\' данных нет!\nВыберите другой тип долга!");
+	return;
+  }
+}
+function showItemProp() {
+var id = jQuery("#list4").jqGrid('getGridParam','selrow');
+if (id) {
+  window.location.href="contact.html?k="+mydata[id-1].key;
+}
+}
+function hideGridCol(){
+    jQuery("#list4").jqGrid('hideCol',"dolg_status");
+    jQuery("#list4").jqGrid('hideCol',"dolg_valuta");
+    jQuery("#list4").jqGrid('hideCol',"dolg_type");
+}
+function check_input() {
+ d_type=$("#dolg_type").val();
+ if (d_type <= 0) {
+ 	alert("Надо выбрать тип долга !")
+	return false;
+}
+ return true;
+}
+function genDolgType(){
+r=String(Math.random()).charAt(2)
+if (r =='0') {r='2'}
+d_list = document.getElementById("dolg_type");
+d_list.options[parseInt(r)].selected=true;
+return r;	
+}
+function firstShow(){
+$.post("action",
+	      {"action":"search_data",
+		   "dolg_type":genDolgType()
+		  },
+	      function(data) {                   
+			makeResponseData(data);
+			showGridItems();
+          }
+       );
+}
+//---------------------b:ajax call--------------	  
+function ajax_save_action(form_id,msg_id) {
+if (check_input()==false){return}
+           var options = {
+        		target:"#"+msg_id,
+        		url:ajax_actions_path,
+        		resetForm:false,
+        		dataType: "json",
+        		success:actionResponse
+        	}
+        	$('#'+msg_id).show();
+        	$('#'+msg_id).html("идет отправка данных");
+        	$('#'+form_id).ajaxSubmit(options);
+}
+function  actionResponse (data, statusText) {                         		  
+		  makeResponseData(data);
+		  //alert('mydata[0].error='+mydata[0].error)
+		  if ((mydata[0] == undefined)||(mydata[0].error == 1)) {
+		  	 return;
+		  } else {
+   		      showGridItems();		
+			  $('#edit_btn').show();
+			  $('#del_btn').show();
+		  }     
+        }
+//---------------------e:ajax call--------------
+jQuery(document).ready(function(){
+//--------------------B:Grid--------------------
+jQuery("#list4").jqGrid(
+         {datatype: "local",
+		    height: 200,
+			width: 680,
+			colNames:['No','Статус', 'Название', 'Что','Сумма','Валюта','Дата долга','d_s','d_v','d_t'],
+			colModel:[ {name:'n',index:'n', width:30, sorttype:"int",align:"left"},			         
+			           {name:'dolg_status_name',index:'dolg_status_name', width:140,editable:true,editoptions:{size:30}},					  
+					   {name:'dolgnik_name',index:'dolgnik_name', width:200,editable:true,editoptions:{size:20}},
+					   {name:'dolg_name',index:'dolg_name', width:250, align:"right",editable:true,editoptions:{size:20}},
+					   {name:'dolg_sum',index:'dolg_sum', width:140, align:"right",sorttype:"float",editable:true,editoptions:{size:20}},
+					   {name:'dolg_valuta_name',index:'dolg_valuta_name', width:70,align:"right",editable:true,editoptions:{size:20}},
+					   {name:'dolg_date',index:'dolg_date', width:90,align:"left",editable:true,editoptions:{size:20}},
+					   {name:'dolg_status',index:'dolg_status', width:1,editable:true,editoptions:{size:1}},
+					   {name:'dolg_valuta',index:'dolg_valuta', width:1,editable:true,editoptions:{size:1}},
+					   {name:'dolg_type',index:'dolg_type', width:1,editable:true,editoptions:{size:1}}					  
+					  ],
+			ondblClickRow:showItemProp, 
+		    multiselect: false,
+			caption: "Введенные данные:"
+           }
+
+)
+hideGridCol();
+showItemProp();
+firstShow();
+}
+
+);
+</script>	
+       <div id="main_container">
+            <table id="layout_table">
+                <tr>
+                    <td colspan="1" id="sub_nav_column" rowspan="1">
+                        <div id="left_column_container">
+                        <div class="sub_nav_container">
+                        <ul class="sub_nav_list" id="sub_nav_list1">
+                            <li><a class="sub_nav_item" href="economic_news.html" id="sni2" shape="rect">Экономические Новости</a></li>
+                            <li><a class="sub_nav_item" href="kurs.html" id="sni2" shape="rect">Курсы валют</a></li>
+                            <li><a class="sub_nav_item" href="lib.html" id="sni2" shape="rect">Библиотека</a></li>
+                        </ul>
+                         </div>
+                         <div id="sub_container1"></div>
+                         </div>
+                    </td>
+                    <td colspan="1" id="content_column" rowspan="1">
+                        <div id="sub_container2">
+                        <div class="content" id="content_container">
+                        <h3 align="left">
+                        Поиск долговых обязательств<br> 
+						по системе взаимозачет:
+                        </h3>
+						<span id="mes_info"></span><div class="reset"></div>                       
+                            <form name="form_search" id="form_search" action="search" method="POST">
+                            <input type="hidden" name="action" value="search_data" />
+                              Обьект долга(тип):<br><br>
+							  {% include "dolg_type_select.html" %}
+                              <input name="search" type="button" value="Поиск" onclick="ajax_save_action('form_search','mes_info');" >
+                            </form>
+                          <br>
+						 
+							<div class="reset"></div>						 
+						    <table id="list4"></table><br>
+							 <i>Кликнуть 2 раза по строке для связи с автором анкеты</i>
+                        </div>
+                        </div>
+                    </td>
+                    </tr>
+                    </table>
+       </div>
+{% include "footer.html" %} 
+

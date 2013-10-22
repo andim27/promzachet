@@ -1,0 +1,1 @@
+{% ifequal  lang "saved" %}Данные сохранены!{% endifequal %}{% ifequal  lang "info_saved" %}Информация принята!{% endifequal %}
